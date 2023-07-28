@@ -33,19 +33,36 @@ void updateRank(AVLNodePtr node) {
 
     node->rank = 1 + leftRank + rightRank;
 }
+void updateMaxNodeSubtree(AVLNodePtr node) {
+    if (node == NULL)
+        return;
+    else if (node->child[RIGHT] == NULL)
+        node->max = node;
+    else
+        node->max = node->child[RIGHT]->max;
+}
+void updateMinNodeSubtree(AVLNodePtr node) {
+    if (node == NULL)
+        return;
+    else if (node->child[LEFT] == NULL)
+        node->min = node;
+    else
+        node->min = node->child[LEFT]->min;
+}
 //Update both Height and Rank together for a cleaner code
 void updateNodeProperties(AVLNodePtr node) {
     if (node == NULL)
         return;
     updateHeight(node);
     updateRank(node);
+    updateMaxNodeSubtree(node);
+    updateMinNodeSubtree(node);
 }
 //Update Node's parent
 void updateParentProperties(AVLNodePtr node) {
     if (node == NULL) return;
     if (node->parent == NULL) return;
-    updateHeight(node->parent);
-    updateRank(node->parent);
+    updateNodeProperties(node->parent);
 }
 // Iterative method to update at most log n Ancestors
 void updateAncestorProperties(AVLNodePtr node) {
@@ -224,7 +241,7 @@ AVLNodePtr getSuccessor(AVLNodePtr node) {
         return NULL;
 
     if (node->child[RIGHT])
-        return First(node->child[RIGHT]);
+        return node->child[RIGHT]->min;
     else {
         AVLNodePtr current = node;
         while (current && current->parent) {
@@ -240,7 +257,7 @@ AVLNodePtr getPredecessor(AVLNodePtr node) {
         return NULL;
 
     if (node->child[LEFT])
-        return Last(node->child[LEFT]);
+        return node->child[LEFT]->max;
     else {
         AVLNodePtr current = node;
         while (current && current->parent) {

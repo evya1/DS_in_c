@@ -39,7 +39,9 @@ int avl_property_test( AVLNodePtr root, TestResult * result ){
     h_right = avl_property_test( root->child[RIGHT], result );
     if (_abs(h_left-h_right) > 1 )
         printNode(root); // for print debugging purposes
-    *result =  (_abs(h_left-h_right) > 1 ) ? FAILED:*result;
+    *result =  (_abs(h_left-h_right) > 1 ) ? FAILED: *result;
+    *result = (root->key > root->max->key ) ? FAILED: *result;
+    *result = (root->key < root->min->key ) ? FAILED: *result;
     return 1+ _max(h_left,h_right);
 }
 
@@ -125,6 +127,8 @@ TestResult delete_test(void){
 //    performHowManyTest(root,0,2000000);
     result = search_range( root, 1000000, 1099999, 1000000, 1099999 );
     result = search_range( root, 1500001, 2000000, 1500001, 2000000 ) ? result:FAILED;
+//    root = avlDelete(root,2000000,2000000 );
+//    root = avlDelete(root,1000000,1000000 );
     for( i=1100000; i<=1500000; i++){
         if(avlSearch(root, i, i) )
             result = FAILED;
@@ -507,10 +511,10 @@ int main(void){
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
     printf("Time taken by delete_test_2: %f seconds\n", cpu_time_used);
 
-//    delete_test_two();
-//    delete_test_three();
-//    delete_third_test();
-//    delete_third_test2();
-//    delete_third_test3();
+    delete_test_two();
+    delete_test_three();
+    delete_third_test();
+    delete_third_test2();
+    delete_third_test3();
     return 0;
 }

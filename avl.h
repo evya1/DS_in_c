@@ -8,6 +8,7 @@ typedef struct AVLNode * AVLNodePtr;
 typedef struct AVLNode{
     AVLNodePtr child[2];
 	AVLNodePtr parent;
+    AVLNodePtr max, min;
     int key, height, y, rank; // rank parameter is augmented parameter that store the subtree size and not the actual rank of the node (which is something that difficult to augment in height balanced tree)
 } AVLNode;
 
@@ -51,6 +52,8 @@ void deleteAvlTree(AVLNodePtr root );
 //Help methods
 void updateHeight(AVLNodePtr node);
 void updateRank(AVLNodePtr node);
+void updateMaxNodeSubtree(AVLNodePtr node);
+void updateMinNodeSubtree(AVLNodePtr node);
 void updateNodeProperties(AVLNodePtr node);
 void updateParentProperties(AVLNodePtr node);
 void updateAncestorProperties(AVLNodePtr node);
