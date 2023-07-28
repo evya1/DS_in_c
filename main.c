@@ -39,12 +39,12 @@ int avl_property_test( AVLNodePtr root, TestResult * result ){
     h_right = avl_property_test( root->child[RIGHT], result );
     if (_abs(h_left-h_right) > 1 )
         printNode(root); // for print debugging purposes
-    *result =  (_abs(h_left-h_right) > 1 ) ? FAILED: *result;
-    *result = (root->key > root->max->key ) ? FAILED: *result;
+    *result =  (_abs(h_left-h_right) > 1 ) ? FAILED: *result; // testing Heights/Skew
+    *result = (root->key > root->max->key ) ? FAILED: *result; // Max testing
     *result = (root->key < root->min->key ) ? FAILED: *result;
+    *result = (root->skew > 1 || root->skew < -1 ) ? FAILED: *result; // skew testing
     return 1+ _max(h_left,h_right);
 }
-
 AVLNodePtr insert_range( AVLNodePtr root, int x1, int x2, int y1, int y2 ){
     int j=y1 + y2-y2;
     for( int i=x1; i<=x2; i++ ){

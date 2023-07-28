@@ -7,9 +7,8 @@ typedef struct AVLNode * AVLNodePtr;
 
 typedef struct AVLNode{
     AVLNodePtr child[2];
-	AVLNodePtr parent;
-    AVLNodePtr max, min;
-    int key, height, y, rank; // rank parameter is augmented parameter that store the subtree size and not the actual rank of the node (which is something that difficult to augment in height balanced tree)
+	AVLNodePtr parent, max, min;
+    int key, height, y, rank, skew; // rank parameter is augmented parameter that store the subtree size and not the actual rank of the node (which is something that difficult to augment in height balanced tree)
 } AVLNode;
 
 // return the maximum of x and y.

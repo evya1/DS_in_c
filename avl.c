@@ -33,6 +33,11 @@ void updateRank(AVLNodePtr node) {
 
     node->rank = 1 + leftRank + rightRank;
 }
+void updateSkew(AVLNodePtr node) {
+    if (node == NULL)
+        return;
+    node->skew = getBalance(node);
+}
 void updateMaxNodeSubtree(AVLNodePtr node) {
     if (node == NULL)
         return;
@@ -55,6 +60,7 @@ void updateNodeProperties(AVLNodePtr node) {
         return;
     updateHeight(node);
     updateRank(node);
+    updateSkew(node);
     updateMaxNodeSubtree(node);
     updateMinNodeSubtree(node);
 }
