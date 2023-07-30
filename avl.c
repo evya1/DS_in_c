@@ -88,13 +88,14 @@ int getBalance(AVLNodePtr node) {
         return -1;
     }
 
-    int leftheight = (node->child[LEFT] != NULL) ? node->child[LEFT]->height : -1;
-    int rightheight = (node->child[RIGHT] != NULL) ? node->child[RIGHT]->height : -1;
+    int leftChildHeight = (node->child[LEFT] != NULL) ? node->child[LEFT]->height : -1;
+    int rightChildHeight = (node->child[RIGHT] != NULL) ? node->child[RIGHT]->height : -1;
 
-    return rightheight - leftheight;
+    return rightChildHeight - leftChildHeight;
 }
 //The method's cases correspond to those covered in the above-referenced AVL tree lecture.
 AVLNodePtr rebalance(AVLNodePtr root){
+
     if (root == NULL)
         return NULL;
 
@@ -102,28 +103,28 @@ AVLNodePtr rebalance(AVLNodePtr root){
 
     if (balance > 1){
         // Case 1 & 2
-        if (root->child[RIGHT] && getBalance(root->child[RIGHT]) >= 0) {
+        if (root->child[RIGHT] && getBalance(root->child[RIGHT]) >= 0)
             return leftRotate(root);
-        }
+
             // Case 3 (skew(root->child[RIGHT]) = -1)
         else {
-            if (root->child[RIGHT]) {
+            if (root->child[RIGHT])
                 rightRotate(root->child[RIGHT]);
-            }
-            return leftRotate(root);
+
+        return leftRotate(root);
         }
     }
     else if (balance < -1) {
         // Case 1 & 2
-        if (root->child[LEFT] && getBalance(root->child[LEFT]) <= 0) {
+        if (root->child[LEFT] && getBalance(root->child[LEFT]) <= 0)
             return rightRotate(root);
-        }
+
             // Case 3 (skew(root->child[LEFT]) = 1)
         else {
-            if (root->child[LEFT]) {
+            if (root->child[LEFT])
                 leftRotate(root->child[LEFT]);
-            }
-            return rightRotate(root);
+
+        return rightRotate(root);
         }
     }
 
