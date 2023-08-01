@@ -14,29 +14,23 @@ int _abs(int x) {
     return (x < 0) ? -x : x;
 }
 
-//helping functoins
 void updateHeight(AVLNodePtr node) {
     if (node == NULL)
         return;
 
-    int leftheight = (node->child[LEFT] != NULL) ? node->child[LEFT]->height : -1;
-    int rightheight = (node->child[RIGHT] != NULL) ? node->child[RIGHT]->height : -1;
+    int leftHeight = (node->child[LEFT] != NULL) ? node->child[LEFT]->height : -1;
+    int rightHeight = (node->child[RIGHT] != NULL) ? node->child[RIGHT]->height : -1;
 
-    node->height = 1 + _max(leftheight, rightheight);
+    node->height = 1 + _max(leftHeight, rightHeight);
 }
 void updateRank(AVLNodePtr node) {
     if (node == NULL)
         return;
 
-    int leftRank = (node->child[LEFT] != NULL) ? node->child[LEFT]->rank : 0;
-    int rightRank = (node->child[RIGHT] != NULL) ? node->child[RIGHT]->rank : 0;
+    int leftRank = (node->child[LEFT] != NULL) ? node->child[LEFT]->size : 0;
+    int rightRank = (node->child[RIGHT] != NULL) ? node->child[RIGHT]->size : 0;
 
-    node->rank = 1 + leftRank + rightRank;
-}
-void updateSkew(AVLNodePtr node) {
-    if (node == NULL)
-        return;
-    node->skew = getBalance(node);
+    node->size = 1 + leftRank + rightRank;
 }
 void updateMaxNodeSubtree(AVLNodePtr node) {
     if (node == NULL)
@@ -60,7 +54,6 @@ void updateNodeProperties(AVLNodePtr node) {
         return;
     updateHeight(node);
     updateRank(node);
-    updateSkew(node);
     updateMaxNodeSubtree(node);
     updateMinNodeSubtree(node);
 }
@@ -275,24 +268,25 @@ AVLNodePtr getPredecessor(AVLNodePtr node) {
         return current;
     }
 }
-AVLNodePtr getSubtreeAt(AVLNodePtr root, int index)
+// Select the i-th item in the rooted subtree of root
+AVLNodePtr selectAt(AVLNodePtr root, int index)
 {
     int leftChildSubtreeSize = 0;
     if (root == NULL || index < 0)
         return NULL;
     if (root->child[LEFT])
-        leftChildSubtreeSize = root->child[LEFT]->rank;
+        leftChildSubtreeSize = root->child[LEFT]->size;
     if (index == leftChildSubtreeSize)
         return root;
     if (index < leftChildSubtreeSize)
-        return getSubtreeAt(root->child[LEFT], index);
+        return selectAt(root->child[LEFT], index);
     if (index > leftChildSubtreeSize)
-        return getSubtreeAt(root->child[RIGHT], index - leftChildSubtreeSize - 1);
+        return selectAt(root->child[RIGHT], index - leftChildSubtreeSize - 1);
     return NULL;
 }
 /***
  * @param node
- * @return int index of a node in the travesale soreted inorder relative to the root
+ * @return int index of a node in the traversal sorted inorder relative to the root
  ***/
 int getIndex(AVLNodePtr node) {
     if (!node)
@@ -301,13 +295,13 @@ int getIndex(AVLNodePtr node) {
     int index = 0;
 
     if (node->child[LEFT])
-        index = node->child[LEFT]->rank;
+        index = node->child[LEFT]->size;
 
     AVLNodePtr current = node;
     while (current->parent) {
         if (current->parent->child[RIGHT] == current) {
             if (current->parent->child[LEFT])
-                index += current->parent->child[LEFT]->rank + 1;
+                index += current->parent->child[LEFT]->size + 1;
             else
                 index++;
         }
@@ -327,13 +321,13 @@ int getRelativeIndex(AVLNodePtr root,AVLNodePtr node) {
     int index = 0;
 
     if (node->child[LEFT])
-        index = node->child[LEFT]->rank;
+        index = node->child[LEFT]->size;
 
     AVLNodePtr current = node;
     while (current->parent && current->parent != root) {
         if (current->parent->child[RIGHT] == current) {
             if (current->parent->child[LEFT])
-                index += current->parent->child[LEFT]->rank + 1;
+                index += current->parent->child[LEFT]->size + 1;
             else
                 index++;
         }
@@ -465,17 +459,17 @@ int howMany(AVLNodePtr root, int x1, int x2){
 
 }
 AVLNodePtr newAvlNode(int x, int y){
-    AVLNodePtr newnode = (AVLNodePtr) malloc(sizeof(AVLNode));
-    if (!newnode)
+    AVLNodePtr newNode = (AVLNodePtr) malloc(sizeof(AVLNode));
+    if (!newNode)
         return NULL;
 
-    newnode->key = x;
-    newnode->y = y;
-    newnode->child[LEFT] = NULL;
-    newnode->child[RIGHT] = NULL;
-    newnode->parent = NULL;
-    updateNodeProperties(newnode);
-    return newnode;
+    newNode->key = x;
+    newNode->y = y;
+    newNode->child[LEFT] = NULL;
+    newNode->child[RIGHT] = NULL;
+    newNode->parent = NULL;
+    updateNodeProperties(newNode);
+    return newNode;
 }
 void deleteAvlTree(AVLNodePtr root) {
     if (root == NULL)
@@ -682,8 +676,8 @@ AVLNodePtr deleteThird(AVLNodePtr root, int x1, int x2) {
         biggerBoundIndexRelativeToRoot = getIndex(bigger);
 
         // Get the nodes to the left and right of the range for deletion.
-        nodeL = getSubtreeAt(root, lowerBoundIndexRelativeToRoot + next - 1);
-        nodeR = getSubtreeAt(root, biggerBoundIndexRelativeToRoot - next + 1);
+        nodeL = selectAt(root, lowerBoundIndexRelativeToRoot + next - 1);
+        nodeR = selectAt(root, biggerBoundIndexRelativeToRoot - next + 1);
         sucNodeL = getSuccessor(nodeL);
         preNodeR = getPredecessor(nodeR);
 
@@ -722,7 +716,7 @@ AVLNodePtr deleteThird(AVLNodePtr root, int x1, int x2) {
 }
 void printNode(AVLNodePtr node){
     if (node) {
-        printf("(key: %d, y: %d, subtree size: %d, index: %d) \n" ,node->key ,node->y ,node->rank, getIndex(node));
+        printf("(key: %d, y: %d, subtree size: %d, index: %d) \n" , node->key , node->y , node->size, getIndex(node));
     }
 }
 void printInorder(AVLNodePtr root) {

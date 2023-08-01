@@ -8,14 +8,14 @@ typedef struct AVLNode * AVLNodePtr;
 typedef struct AVLNode{
     AVLNodePtr child[2];
 	AVLNodePtr parent, max, min;
-    int key, height, y, rank, skew; // rank parameter is augmented parameter that store the subtree size and not the actual rank of the node (which is something that difficult to augment in height balanced tree)
+    int key, height, y, size; // rank parameter is augmented parameter that store the subtree size and not the actual rank of the node (which is something that difficult to augment in height balanced tree)
 } AVLNode;
 
 // return the maximum of x and y.
-int _max( int x, int y );
+int _max(int x, int y);
 
 // return the absolute value of x.
-int _abs( int x );
+int _abs(int x);
 
 // AVL Operations and Queries
 
@@ -65,7 +65,7 @@ AVLNodePtr First(AVLNodePtr node);
 AVLNodePtr Last(AVLNodePtr node);
 AVLNodePtr getSuccessor(AVLNodePtr node);
 AVLNodePtr getPredecessor(AVLNodePtr node);
-AVLNodePtr getSubtreeAt(AVLNodePtr root, int index);
+AVLNodePtr selectAt(AVLNodePtr root, int index);
 int getIndex(AVLNodePtr node);
 int getRelativeIndex(AVLNodePtr root,AVLNodePtr node);
 AVLNodePtr getLca(AVLNodePtr root, int x1, int x2);

@@ -42,7 +42,6 @@ int avl_property_test( AVLNodePtr root, TestResult * result ){
     *result =  (_abs(h_left-h_right) > 1 ) ? FAILED: *result; // testing Heights/Skew
     *result = (root->key > root->max->key ) ? FAILED: *result; // Max testing
     *result = (root->key < root->min->key ) ? FAILED: *result;
-    *result = (root->skew > 1 || root->skew < -1 ) ? FAILED: *result; // skew testing
     return 1+ _max(h_left,h_right);
 }
 AVLNodePtr insert_range( AVLNodePtr root, int x1, int x2, int y1, int y2 ){
@@ -173,9 +172,7 @@ TestResult delete_test_two(void){
     AVLNodePtr root = NULL;
     TestResult result = PASSED;
     root = insert_range( root, 1 , 10, 1, 10 );
-
     root = delete_range( root, 3, 5, 3, 5 );
-
     result = search_range( root, 1, 2, 1, 2 );
     result = search_range( root, 6, 10, 6, 10 ) ? result:FAILED;
     for( i=3; i<=5; i++){
@@ -183,7 +180,7 @@ TestResult delete_test_two(void){
             result = FAILED;
     }
     avl_property_test( root, &result );
-    printf("DELETE TEST ");
+    printf("DELETE TEST #2 ");
     print_result( result );
     deleteAvlTree(root);
     return result;
@@ -205,14 +202,14 @@ TestResult delete_test_three(void){
     printf("------------END deleteThird------------\n");
     printInorder(root);
     // LCA test
-    performLCATest(root, key1, key2);
+//    performLCATest(root, key1, key2);
     root = performNodeTests(root, 0, optionalKey);
     // Perform the tests on the nodes and print the results
 //    root = performNodeTests(root, key, optionalKey);
-    performLCATest(root, 14, 22);
-    performLCATest(root, 0, 200);
+//    performLCATest(root, 14, 22);
+//    performLCATest(root, 0, 200);
     // LCA test
-    performLCATest(root, key1, key2);
+//    performLCATest(root, key1, key2);
     result = search_range( root, 1, 333, 1, 333 ) ? result:FAILED;
     result = search_range( root, 667, 6000, 667, 6000 ) ? result:FAILED;
     for( i=334; i<=666; i++){
@@ -227,9 +224,8 @@ TestResult delete_test_three(void){
             result = FAILED;
     }
     avl_property_test( root, &result );
-    printf("DELETE TEST ");
+    printf("DELETE TEST #3 ");
     print_result( result );
-    performHowManyTest (root, 0, 6000);
     deleteAvlTree(root);
     return result;
 }
@@ -254,7 +250,7 @@ TestResult delete_third_test(void){
             result = FAILED;
     }
     avl_property_test( root, &result );
-    printf("DELETE TEST ");
+    printf("DELETE TEST THIRD #1");
     print_result( result );
     deleteAvlTree(root);
     return result;
@@ -442,10 +438,8 @@ TestResult delete_third_test2(void){
     avl_property_test( root, &result );
     root = deleteThird(root, 1000001, 2000003);
     avl_property_test( root, &result );
-    printf("±±±±±±±±±§§DELETE TEST ");
-    print_result( result );
     deleteAvlTree(root);
-    printf("DELETE TEST ");
+    printf("DELETE TEST THIRD #2 ");
     print_result( result );
     return result;
     }
@@ -466,10 +460,8 @@ TestResult delete_third_test3(void){
     avl_property_test( root, &result );
     root = deleteThird(root, 0, 980);
     avl_property_test( root, &result );
-    printf("±±±±±±±±±§§DELETE TEST ");
-    print_result( result );
     deleteAvlTree(root);
-    printf("DELETE TEST ");
+    printf("DELETE TEST THIRD #3 ");
     print_result( result );
     return result;
 }
