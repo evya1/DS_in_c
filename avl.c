@@ -314,27 +314,22 @@ int getIndex(AVLNodePtr node) {
  * @param node
  * @return int index of a node in the travesale inorder relative to the a tree rooted in a given node
  ***/
-int getRelativeIndex(AVLNodePtr root,AVLNodePtr node) {
-    if (!node)
-        return 0;
+int rank(AVLNodePtr root, AVLNodePtr node) {
+    int rank = 0;
+    AVLNodePtr current = node;
 
-    int index = 0;
+    if (!node)
+        return -1;
 
     if (node->child[LEFT])
-        index = node->child[LEFT]->size;
+        rank = node->child[LEFT]->size;
 
-    AVLNodePtr current = node;
-    while (current->parent && current->parent != root) {
-        if (current->parent->child[RIGHT] == current) {
-            if (current->parent->child[LEFT])
-                index += current->parent->child[LEFT]->size + 1;
-            else
-                index++;
-        }
+    while (current != root) {
+        if (current == current->parent->child[RIGHT])
+                rank += current->parent->child[LEFT]->size + 1;
         current = current->parent;
     }
-
-    return index;
+    return rank;
 }
 /***
  *

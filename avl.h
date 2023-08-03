@@ -67,7 +67,7 @@ AVLNodePtr getSuccessor(AVLNodePtr node);
 AVLNodePtr getPredecessor(AVLNodePtr node);
 AVLNodePtr selectAt(AVLNodePtr root, int index);
 int getIndex(AVLNodePtr node);
-int getRelativeIndex(AVLNodePtr root,AVLNodePtr node);
+int rank(AVLNodePtr root, AVLNodePtr node);
 AVLNodePtr getLca(AVLNodePtr root, int x1, int x2);
 AVLNodePtr lca(AVLNodePtr root, int x1, int x2);
 AVLNodePtr search(AVLNodePtr root, int x, int y);

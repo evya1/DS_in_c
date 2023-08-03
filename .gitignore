@@ -1,2 +1,5 @@
 .DS_Store
-notfinished.txt
+*.txt
+myprogram
+Makefile
+.gitignore
