@@ -7,35 +7,35 @@ typedef enum
 {
     FAILED,
     PASSED
-} TestResult;
+} Bool;
 
-void print_result(TestResult result);
+void print_result(Bool result);
 // insert all integers in [x,y] to the tree.
 AVLNodePtr insert_range(AVLNodePtr root, int x1, int x2, int y1, int y2);
 
 // search for all integers in [x,y]. Return FAILED if at least one search has failed.
-TestResult search_range(AVLNodePtr root, int x1, int x2, int y1, int y2);
+Bool search_range(AVLNodePtr root, int x1, int x2, int y1, int y2);
 
 // delete all integers in [x,y] from teh tree.
 AVLNodePtr delete_range(AVLNodePtr root, int x1, int x2, int y1, int y2);
 
 // check if the tree has the AVL property in every node. If not, *result is assigned FAILED.
-int avl_property_test(AVLNodePtr root, TestResult *result);
+int avl_property_test(AVLNodePtr root, Bool *result);
 
-TestResult search_insert_test(void);
-TestResult search_insert_test_2(void);
+Bool search_insert_test(void);
+Bool search_insert_test_2(void);
 
-TestResult delete_test(void);
-TestResult delete_test_2(void);
+Bool delete_test(void);
+Bool delete_test_2(void);
 
-TestResult delete_test_two(void);
+Bool delete_test_two(void);
 AVLNodePtr performNodeTests(AVLNodePtr root, int key, int optionalKey);
 void performLCATest(AVLNodePtr root, int key1, int key2);
 void performHowManyTest(AVLNodePtr root, int x1, int x2);
-TestResult delete_third_test(void);
-TestResult delete_test_three(void);
+Bool delete_third_test(void);
+Bool delete_test_three(void);
 
-int avl_property_test(AVLNodePtr root, TestResult *result)
+int avl_property_test(AVLNodePtr root, Bool *result)
 {
     int h_left, h_right;
     if (!root)
@@ -60,7 +60,7 @@ AVLNodePtr insert_range(AVLNodePtr root, int x1, int x2, int y1, int y2)
     return root;
 }
 
-TestResult search_range(AVLNodePtr root, int x1, int x2, int y1, int y2)
+Bool search_range(AVLNodePtr root, int x1, int x2, int y1, int y2)
 {
     AVLNodePtr node = NULL;
 
@@ -88,7 +88,7 @@ AVLNodePtr delete_range(AVLNodePtr root, int x1, int x2, int y1, int y2)
     return root;
 }
 
-void print_result(TestResult result)
+void print_result(Bool result)
 {
     if (result == PASSED)
         printf("PASSED.\n");
@@ -96,10 +96,10 @@ void print_result(TestResult result)
         printf("FAILED.\n");
 }
 
-TestResult search_insert_test(void)
+Bool search_insert_test(void)
 {
     AVLNodePtr root = NULL;
-    TestResult result = PASSED;
+    Bool result = PASSED;
     root = insert_range(root, 1000000, 2000000, 1000000, 2000000);
     result = search_range(root, 1000000, 2000000, 1000000, 2000000);
     avl_property_test(root, &result);
@@ -109,10 +109,10 @@ TestResult search_insert_test(void)
     return result;
 }
 
-TestResult search_insert_test_2(void)
+Bool search_insert_test_2(void)
 {
     AVLNodePtr root = NULL;
-    TestResult result = PASSED;
+    Bool result = PASSED;
 
     // Insert a large range of nodes from 1,000,000 to 10,000,000
     root = insert_range(root, 1000000, 10000000, 1000000, 10000000);
@@ -130,11 +130,11 @@ TestResult search_insert_test_2(void)
     return result;
 }
 
-TestResult delete_test(void)
+Bool delete_test(void)
 {
     int i;
     AVLNodePtr root = NULL;
-    TestResult result = PASSED;
+    Bool result = PASSED;
     root = insert_range(root, 1000000, 2000000, 1000000, 2000000);
     //    performHowManyTest(root,0,2000000);
     //    performHowManyTest(root,1100000,1500000);
@@ -156,11 +156,11 @@ TestResult delete_test(void)
     return result;
 }
 
-TestResult delete_test_2(void)
+Bool delete_test_2(void)
 {
     int i;
     AVLNodePtr root = NULL;
-    TestResult result = PASSED;
+    Bool result = PASSED;
 
     // Insert a large range of nodes from 1,000,000 to 10,000,000
     root = insert_range(root, 1000000, 10000000, 1000000, 10000000);
@@ -185,12 +185,12 @@ TestResult delete_test_2(void)
     return result;
 }
 
-TestResult delete_test_two(void)
+Bool delete_test_two(void)
 {
     printf("delete_test_two:\n");
     int i;
     AVLNodePtr root = NULL;
-    TestResult result = PASSED;
+    Bool result = PASSED;
     root = insert_range(root, 1, 10, 1, 10);
     root = delete_range(root, 3, 5, 3, 5);
     result = search_range(root, 1, 2, 1, 2);
@@ -208,7 +208,7 @@ TestResult delete_test_two(void)
 }
 
 // DELETE LATER !
-TestResult delete_test_three(void)
+Bool delete_test_three(void)
 {
     printf("delete_test_three:\n\n");
     int i;
@@ -216,7 +216,7 @@ TestResult delete_test_three(void)
     // int key2 = 20;
     int optionalKey = 10;
     AVLNodePtr root = NULL;
-    TestResult result = PASSED;
+    Bool result = PASSED;
     root = insert_range(root, 1, 6000, 1, 6000);
     printf("------------deleteThird------------\n");
     root = deleteThird(root, 0, 999);
@@ -254,11 +254,11 @@ TestResult delete_test_three(void)
     return result;
 }
 
-TestResult delete_third_test(void)
+Bool delete_third_test(void)
 {
     int i;
     AVLNodePtr root = NULL;
-    TestResult result = PASSED;
+    Bool result = PASSED;
     root = insert_range(root, 1000000, 2000000, 1000000, 2000000);
     root = delete_range(root, 1100000, 1500000, 1100000, 1500000);
     avl_property_test(root, &result);
@@ -380,7 +380,7 @@ AVLNodePtr performNodeTests(AVLNodePtr root, int key, int optionalKey)
     }
     performHowManyTest(root, First(root)->key, Last(root)->key);
     printf("-------------------------------------------\n");
-    TestResult result = PASSED;
+    Bool result = PASSED;
     avl_property_test(root, &result);
     printf("DELETE TEST ");
     print_result(result);
@@ -424,10 +424,10 @@ void performHowManyTest(AVLNodePtr root, int x1, int x2)
     printf("--------------- How Many Test End ---------------\n");
 }
 
-TestResult delete_third_test2(void)
+Bool delete_third_test2(void)
 {
     AVLNodePtr root = NULL;
-    TestResult result = PASSED;
+    Bool result = PASSED;
     root = insert_range(root, 1000000, 2000001, 1000000, 2000001);
     //    root = delete_range( root, 1100000, 1500000, 1100000, 1500000 );
     avl_property_test(root, &result);
@@ -495,10 +495,10 @@ TestResult delete_third_test2(void)
     return result;
 }
 
-TestResult delete_third_test3(void)
+Bool delete_third_test3(void)
 {
     AVLNodePtr root = NULL;
-    TestResult result = PASSED;
+    Bool result = PASSED;
     root = insert_range(root, 1, 1000, 1, 1000);
     //    root = delete_range( root, 1100000, 1500000, 1100000, 1500000 );
     avl_property_test(root, &result);
