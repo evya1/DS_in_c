@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror 
 LDFLAGS = -lm  # Add any necessary linker flags or libraries here
 
-SRCS = main.c avl.c  # List all your source files here
+SRCS = main.c avl.c test.c avl_tests.c# List all your source files here
 OBJS = $(SRCS:.c=.o)
 
 TARGET = main

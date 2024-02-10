@@ -1,107 +1,57 @@
-#include "avl.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include "test.h"
+#include "avl.h"
 
-typedef enum {FAILED,PASSED} TestResult;
+/**
+ * Run a test function and measure its execution time.
+ *
+ * @param test_function The test function to be executed.
+ *                      It should return a TestResult and take no parameters.
+ * @param test_name     A string representing the name of the test.
+ *                      Used for displaying results with the test name.
+ *
+ * @return              The result of the test (FAILED or PASSED).
+ *
+ * Example Usage:
+ *
+ *     // Define a test function with the signature: TestResult my_test_function();
+ *     TestResult my_test_function() {
+ *         // ... implementation of the test ...
+ *     }
+ *
+ *     // In main or another testing function:
+ *     run_test(my_test_function, "My Test Function");
+ */
+void run_test(TestResult (*test_function)(), const char *test_name)
+{
+    clock_t start, end;
+    double cpu_time_used;
 
-void print_result_2(TestResult result );
+    // Record the starting time
+    start = clock();
 
-// insert all integers in [x,y] to the tree.
-AVLNodePtr insert_range( AVLNodePtr root, int x1, int x2, int y1, int y2 );
+    // Run the test
+    TestResult result = test_function();
 
-// search for all integers in [x,y]. Return FAILED if at least one search has failed.
-TestResult search_range_2( AVLNodePtr root, int x1, int x2, int y1, int y2 );
+    // Record the ending time
+    end = clock();
 
-// delete all integers in [x,y] from teh tree.
-AVLNodePtr delete_range( AVLNodePtr root, int x1, int x2, int y1, int y2);
+    // Calculate the time taken in seconds
+    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
 
-// check if the tree has the AVL property in every node. If not, *result is assigned FAILED.
-int avl_property_test( AVLNodePtr root, TestResult * result );
+    // Display the result and execution time
+    printf("Test: %s\n", test_name);
+    printf("Result: %s\n", (result == PASSED) ? "PASSED" : "FAILED");
+    printf("Time taken: %f seconds\n", cpu_time_used);
+    printf("\n");
+}
 
-TestResult search_insert_test();
-
-TestResult delete_test();
-int test(void);
-
-void print_result_2(TestResult result ){
-    if( result==PASSED )
+void print_result(TestResult result)
+{
+    if (result == PASSED)
         printf("PASSED.\n");
     else
         printf("FAILED.\n");
-}
-
-//checks if all nodes in the middle third has been deleted
-TestResult search_range_mid_third(AVLNodePtr root, int x1, int x2, int y1, int y2) {
-    AVLNodePtr node = NULL;
-    int j = y1;
-    for (int i = x1; i <= x2; ++i) {
-        node = avlSearch(root, i, j);
-        if (node) { //|| node->key == i)) {
-            return FAILED;
-        }
-        j++;
-    }
-    return PASSED;
-}
-
-//checks if the rest of the nodes are still in the tree
-TestResult search_range_2(AVLNodePtr root, int x1, int x2, int y1, int y2) {
-    AVLNodePtr node = NULL;
-    int j = y1;
-    for (int i = x1; i <= x2; ++i)
-    {
-        node = avlSearch(root, i, j);
-        if (!(node && node->key == i))
-        {
-            return FAILED;
-        }
-
-        if (node->child[0])
-        {
-            if (!(node->key == node->child[0]->parent->key))
-                return FAILED;
-
-        }
-
-        if (node->child[1])
-        {
-            if (!(node->key == node->child[1]->parent->key))
-                return FAILED;
-
-        }
-        j++;
-    }
-    return PASSED;
-}
-
-TestResult delete_third_test_2(void) {
-    AVLNodePtr root = NULL;
-    TestResult result = PASSED;
-    int i;
-    int x1 = 105000;
-    int x2 = 194999;
-//    for (i = 100000; i < 200001; i++) {
-//        root = avl_insert(root, i, i);
-//    }
-    root = insert_range( root, 100000 , 200000, 100000, 200000 );
-    AVLNodePtr res = deleteThird(root, x1, x2);
-    //mid range: checks if the third was really deleted
-    printf("was the range deleted?\n");
-    print_result_2(search_range_mid_third(res, 135000, 164999, 135000, 164999));
-
-    //tree after delete_third(): checks if the first third and third third are still in tree
-    printf("does the rest exist?\n");
-    print_result_2(search_range_2(res, 100000, 105000, 100000, 105000));
-    print_result_2(search_range_2(res, 165000, 200000, 165000, 200000));
-
-    avl_property_test( root, &result );
-//    printf("DELETE TEST ");
-    print_result_2(result);
-//    delete_avl_tree( root );
-    return result;
-}
-
-int main1(void){
-    delete_third_test_2();
-    return 0;
 }
